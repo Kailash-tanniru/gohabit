@@ -15,7 +15,16 @@ type LoginFormInputs = {
   password: string;
 };
 
+export const dynamic = 'force-dynamic';
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPageContent />
+    </Suspense>
+  );
+}
+
+ function LoginPageContent() {
   const router = useRouter();
   const { login, loading, error,verifyAuth} = useAuthStore();
   const {
