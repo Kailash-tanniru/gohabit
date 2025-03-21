@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { FaFire, FaCheckCircle, FaChartLine, FaTrophy } from 'react-icons/fa';
-
+import { FaScaleUnbalancedFlip } from "react-icons/fa6";
 const StatsCards = ({ darkMode, habits }) => {
   const stats = useMemo(() => {
     const totalHabits = habits?.length || 0; // Use optional chaining and fallback
@@ -29,7 +29,7 @@ const StatsCards = ({ darkMode, habits }) => {
   }, [habits]);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-2">
       {/* Total Habits Card */}
       <div className="p-4 rounded-lg shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow">
         <div className="flex items-center space-x-4">
@@ -40,6 +40,19 @@ const StatsCards = ({ darkMode, habits }) => {
             <p className="text-sm text-gray-500">Total Habits</p>
             <p className="text-xl font-bold text-gray-800">
               {stats.totalHabits ?? 0} {/* Fallback to 0 if undefined */}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="p-4 rounded-lg shadow-sm bg-white border border-gray-100 hover:shadow-md transition-shadow">
+        <div className="flex items-center space-x-4">
+          <div className="p-3 bg-green-50 rounded-lg">
+            <FaScaleUnbalancedFlip className="text-red-800 text-xl" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Due Today</p>
+            <p className="text-xl font-bold text-gray-800">
+              {stats.dueToday ?? 0} {/* Fallback to 0 if undefined */}
             </p>
           </div>
         </div>
@@ -69,7 +82,7 @@ const StatsCards = ({ darkMode, habits }) => {
           <div>
             <p className="text-sm text-gray-500">Average Streak</p>
             <p className="text-xl font-bold text-gray-800">
-              {stats.averageStreak ?? 0} days {/* Fallback to 0 if undefined */}
+              {stats.averageStreak ?? 0}  {/* Fallback to 0 if undefined */}
             </p>
           </div>
         </div>
@@ -84,7 +97,7 @@ const StatsCards = ({ darkMode, habits }) => {
           <div>
             <p className="text-sm text-gray-500">Longest Streak</p>
             <p className="text-xl font-bold text-gray-800">
-              {stats.longestStreak ?? 0} days {/* Fallback to 0 if undefined */}
+              {stats.longestStreak ?? 0} {/* Fallback to 0 if undefined */}
             </p>
           </div>
         </div>
