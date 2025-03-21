@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import Footer from '@/components/shared/Footer';
-
+import { Suspense } from 'react';
 import Image from 'next/image';
 
 // Define the form input types
