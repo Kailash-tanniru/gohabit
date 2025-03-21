@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/shared/Footer';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function VerifyEmailPage() {
+export default function VerifyEmailPage({searchParams}) {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const { verifyEmailWithOTP, loading, error } = useAuthStore();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   // Extract email from query parameters
   useEffect(() => {
@@ -30,7 +31,8 @@ export default function VerifyEmailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <Suspense fallback = {<div>Loading....</div>}>
+     <div className="min-h-screen bg-white flex flex-col">
       <div className="flex-grow flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-5xl flex flex-col md:flex-row items-center md:items-start md:justify-between gap-8 md:gap-16">
           {/* Left Section - App Info */}
@@ -117,5 +119,6 @@ export default function VerifyEmailPage() {
       {/* Footer */}
       <Footer />
     </div>
+    </Suspense>
   );
 }
