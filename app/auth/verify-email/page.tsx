@@ -7,7 +7,7 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { useRouter } from 'next/navigation';
 import { Suspense } from 'react';
 
-export default function VerifyEmailPage({searchParams}) {
+export default function VerifyEmailPage({ searchParams }) {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const { verifyEmailWithOTP, loading, error } = useAuthStore();
@@ -32,7 +32,7 @@ export default function VerifyEmailPage({searchParams}) {
 
   return (
     <Suspense fallback = {<div>Loading....</div>}>
-     <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white flex flex-col">
       <div className="flex-grow flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-5xl flex flex-col md:flex-row items-center md:items-start md:justify-between gap-8 md:gap-16">
           {/* Left Section - App Info */}
