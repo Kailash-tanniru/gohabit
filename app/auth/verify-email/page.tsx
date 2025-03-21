@@ -4,23 +4,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/shared/Footer';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams  } from 'next/navigation';
 import { Suspense } from 'react';
 
-export default function VerifyEmailPage({ searchParams }) {
+export default function VerifyEmailPage() {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const { verifyEmailWithOTP, loading, error } = useAuthStore();
   const router = useRouter();
-  // const searchParams = useSearchParams();
-
-  // Extract email from query parameters
+  const searchParams = useSearchParams();
+  const emailFromQuery = searchParams.get('email');
   useEffect(() => {
-    const emailFromQuery = searchParams.get('email');
+ 
     if (emailFromQuery) {
       setEmail(decodeURIComponent(emailFromQuery));
     }
-  }, [searchParams]);
+  }, [emailFromQuery]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
