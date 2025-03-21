@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 // Create an Axios instance
 const api = axios.create({
-  baseURL: apiUrl,
+  baseURL: 'https://gohabit-be6b3f901d1b.herokuapp.com',
   withCredentials: true, // Ensures cookies are sent with requests
 });
 
