@@ -5,8 +5,16 @@ import Link from 'next/link';
 import Footer from '@/components/shared/Footer';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useRouter } from 'next/navigation';
-export const dynamic = 'force-dynamic'; 
-export default function ResetPasswordOTPPage({ searchParams }) {
+export const dynamic = 'force-dynamic';
+export default function ResetPasswordOTPPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordOTPPageContent />
+    </Suspense>
+  );
+}
+
+ function ResetPasswordOTPPageContent() {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
