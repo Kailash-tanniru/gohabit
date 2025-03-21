@@ -7,6 +7,9 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { useRouter, useSearchParams  } from 'next/navigation';
 import { Suspense } from 'react';
 
+
+export const dynamic = 'force-dynamic';
+
 export default function VerifyEmailPage() {
   const [otp, setOtp] = useState('');
   const [email, setEmail] = useState('');
