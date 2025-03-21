@@ -1,11 +1,11 @@
 import LoginPage from './auth/login/page';
-
+import { Suspense } from 'react';
 export default function Home() {
  
 
   return (
-    <div>
-       <LoginPage />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginPage />
+    </Suspense>
   );
 }
