@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect,Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/shared/Footer';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+
 export const dynamic = 'force-dynamic';
 export default function ResetPasswordOTPPage() {
   return (
@@ -20,65 +21,76 @@ export default function ResetPasswordOTPPage() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isOTPVerified, setIsOTPVerified] = useState(false);
-  const { verifyPasswordResetOTP, resetPassword, loading, error,requestPasswordReset } = useAuthStore();
+  const { verifyPasswordResetOTP, resetPassword, loading, error, requestPasswordReset } = useAuthStore();
   const router = useRouter();
-  
+
   const [canResendOTP, setCanResendOTP] = useState(true);
-   const [cooldown, setCooldown] = useState(0);
+  const [cooldown, setCooldown] = useState(0);
 
-   const handleResendOTP = async () => {
-  if (!canResendOTP) return;
+  // Use `useSearchParams` to access query parameters
+  const searchParams = useSearchParams();
+  const emailFromQuery = searchParams.get('email');
 
-  const success = await requestPasswordReset(email);
-  if (success) {
-    setCanResendOTP(false);
-    setCooldown(60); // 60 seconds cooldown
-    const interval = setInterval(() => {
-      setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    setTimeout(() => {
-      clearInterval(interval);
-      setCanResendOTP(true);
-    }, 60000);
-  }
-};
+  // Extract email from query parameters
+  useEffect(() => {
+    if (emailFromQuery) {
+      setEmail(decodeURIComponent(emailFromQuery));
+    }
+  }, [emailFromQuery]);
+
+  // Handle OTP resend cooldown
+  useEffect(() => {
+    if (cooldown > 0) {
+      const interval = setInterval(() => {
+        setCooldown((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [cooldown]);
+
+  const handleResendOTP = async () => {
+    if (!canResendOTP) return;
+
+    const success = await requestPasswordReset(email);
+    if (success) {
+      setCanResendOTP(false);
+      setCooldown(60); // 60 seconds cooldown
+      setTimeout(() => setCanResendOTP(true), 60000);
+    }
+  };
+
   const handleOTPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (/^\d{0,6}$/.test(value)) { // Allow only numeric input up to 6 digits
+    if (/^\d{0,6}$/.test(value)) {
       setOtp(value);
     }
   };
 
-  // Extract email from query parameters
-  useEffect(() => {
-    const emailFromQuery = searchParams.get('email');
-    if (emailFromQuery) {
-      setEmail(decodeURIComponent(emailFromQuery));
-    }
-  }, [searchParams]);
-
-  // Handle OTP verification
   const handleOTPSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await verifyPasswordResetOTP(email, otp);
     if (success) {
-      setIsOTPVerified(true); // OTP is verified, show the new password field
+      setIsOTPVerified(true);
     }
   };
 
-  // Handle password reset
   const handlePasswordResetSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if passwords match
+    if (!newPassword || !confirmPassword) {
+      alert('Please fill in both password fields.');
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       alert('Passwords do not match.');
       return;
     }
 
-    const success = await resetPassword(email, otp, newPassword,confirmPassword);
+    const success = await resetPassword(email, otp, newPassword, confirmPassword);
     if (success) {
-      router.push('/auth/password-reset-success'); // Redirect to success page after successful password reset
+      router.push('/auth/password-reset-success');
     }
   };
 
@@ -206,12 +218,12 @@ export default function ResetPasswordOTPPage() {
               {!isOTPVerified && (
                 <div className="text-center">
                   <button
-  className="text-sm text-indigo-600 hover:text-indigo-500 transition duration-300"
-  onClick={handleResendOTP}
-  disabled={!canResendOTP}
->
-  {canResendOTP ? "Didn't receive the OTP? Resend it." : `Resend OTP in ${cooldown}s`}
-</button>
+                    className="text-sm text-indigo-600 hover:text-indigo-500 transition duration-300"
+                    onClick={handleResendOTP}
+                    disabled={!canResendOTP}
+                  >
+                    {canResendOTP ? "Didn't receive the OTP? Resend it." : `Resend OTP in ${cooldown}s`}
+                  </button>
                 </div>
               )}
 
