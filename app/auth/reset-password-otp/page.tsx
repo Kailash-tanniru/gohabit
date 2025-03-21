@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect,Suspense } from 'react';
 import Link from 'next/link';
 import Footer from '@/components/shared/Footer';
 import { useAuthStore } from '@/lib/stores/authStore';
