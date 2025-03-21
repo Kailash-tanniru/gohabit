@@ -29,7 +29,7 @@ api.interceptors.response.use(
 
         // Refresh the access token
         const refreshResponse = await axios.post(
-          'http://localhost:8000/api/token/refresh/',
+          'https://gohabit-be6b3f901d1b.herokuapp.com/api/token/refresh/',
           {},
           { withCredentials: true }
         );
